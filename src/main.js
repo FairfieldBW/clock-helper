@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import App from './App.vue'
-import '../src/assets/styles.css';
+import '../src/assets/styles.scss';
 import Buefy from 'buefy'
 import 'buefy/dist/buefy.css'
 

@@ -1,6 +1,28 @@
 <template>
   <div id="body">
     <section class="section">
+      <h1 class="title is-1">Icon Testing</h1>
+      <nav class="level">
+        <div class="level-left">
+          <div class="level-item">
+            <b-field>
+              <b-switch v-model="icon_bool">Icon Toggle</b-switch>
+            </b-field>
+          </div>
+          <div class="level-item">
+            <b-field label-position="inside" label="URL">
+              <b-input v-model="icon"></b-input>
+            </b-field>
+          </div>
+          <div class="level-item">
+            <b-field label="Icon Count" label-position="inside">
+              <b-numberinput :controls="false" v-model="icon_count"></b-numberinput>
+            </b-field>
+          </div>
+        </div>
+      </nav>
+    </section>
+    <section class="section">
       <h1 class="title is-1">Special Schedule Generator</h1>
       <nav class="level">
         <div class="level-left">
@@ -55,24 +77,31 @@
 {{ '"' + special_schedule_date.getFullYear().toString() + "/" + (special_schedule_date.getMonth() + 1).toString() + "/" + special_schedule_date.getDate().toString() + '": ' + JSON.stringify(special_schedule_dict) }}</pre>
       </div>
     </section>
+
     <section class="section">
       <h1 class="title is-1">Normal Schedule Display</h1>
       <div class="tile is-ancestor">
         <div class="tile is-parent" v-for="day in Object.keys(schedule)" :key="day">
-          <article class="tile is-child notification is-danger">
+          <article class="tile is-child notification is-black">
             <p class="title">{{ day }}</p>
           </article>
         </div>
       </div>
       <div class="tile is-ancestor">
         <div class="tile is-parent is-vertical" v-for="(schedule_, day) in schedule" :key="day">
-          <article class="tile is-child notification is-danger" v-for="(start_end, block) in schedule_" :key="block">
+          <article v-bind:class="['tile', 'is-child', 'notification', color_guide[block]]" v-for="(start_end, block) in schedule_" :key="block">
             <p class="title">{{ block }}</p>
             <p class="subtitle">{{ start_end[0][0] + ":" + start_end[0][1] + "-" + start_end[1][0] + ":" + start_end[1][1]}}</p>
           </article>
         </div>
       </div>
     </section>
+
+    <div v-if="icon_bool">
+      <div v-for="index in icon_count" :key="index" class="icon-thing">
+        <img class="icon-image" :src="icon">
+      </div>
+    </div>
   </div>
 </template>
 
@@ -80,12 +109,16 @@
 export default {
   data() {
     return {
+      icon_bool: false,
+      icon: "",
+      icon_count: 50,
       special_schedule_date: new Date(),
       special_schedule_block: "",
       special_schedule_start: new Date(),
       special_schedule_end: new Date(),
       special_schedule_dict: {},
-      schedule: {"Monday":{"Morning Meeting":[[8,30],[8,50]],"A":[[8,55],[10,10]],"B":[[10,15],[11,30]],"Lunch":[[11,30],[12,30]],"C":[[12,30],[13,45]],"D":[[13,50],[15,5]],"Tutorial":[[15,5],[15,35]]},"Tuesday":{"Group Advisory/1-on-1s":[[8,30],[8,50]],"E":[[8,55],[10,10]],"F":[[10,15],[11,30]],"Lunch":[[11,30],[12,30]],"A":[[12,30],[13,45]],"B":[[13,50],[15,5]],"Tutorial":[[15,5],[15,35]]},"Wednesday":{"Morning Meeting":[[8,30],[8,50]],"C":[[8,55],[10,10]],"D":[[10,15],[11,30]],"Lunch":[[11,30],[12,30]],"E":[[12,30],[13,45]],"F":[[13,50],[15,5]],"Tutorial":[[15,5],[15,35]]},"Thursday":{"Group Advisory/1-on-1s":[[8,30],[8,50]],"B":[[8,55],[10,25]],"A":[[10,35],[12,5]],"Lunch":[[12,5],[12,55]],"C":[[12,55],[14,25]],"Tutorial":[[14,25],[14,55]]},"Friday":{"Morning Meeting":[[8,30],[8,50]],"D":[[8,55],[10,25]],"F":[[10,35],[12,5]],"Lunch":[[12,5],[12,55]],"E":[[12,55],[14,25]]}}
+      schedule: {"Monday":{"Morning Meeting":[[8,30],[8,50]],"A":[[8,55],[10,10]],"B":[[10,15],[11,30]],"Lunch":[[11,30],[12,30]],"C":[[12,30],[13,45]],"D":[[13,50],[15,5]],"Tutorial":[[15,5],[15,35]]},"Tuesday":{"Group Advisory/1-on-1s":[[8,30],[8,50]],"E":[[8,55],[10,10]],"F":[[10,15],[11,30]],"Lunch":[[11,30],[12,30]],"A":[[12,30],[13,45]],"B":[[13,50],[15,5]],"Tutorial":[[15,5],[15,35]]},"Wednesday":{"Morning Meeting":[[8,30],[8,50]],"C":[[8,55],[10,10]],"D":[[10,15],[11,30]],"Lunch":[[11,30],[12,30]],"E":[[12,30],[13,45]],"F":[[13,50],[15,5]],"Tutorial":[[15,5],[15,35]]},"Thursday":{"Group Advisory/1-on-1s":[[8,30],[8,50]],"B":[[8,55],[10,25]],"A":[[10,35],[12,5]],"Lunch":[[12,5],[12,55]],"C":[[12,55],[14,25]],"Tutorial":[[14,25],[14,55]]},"Friday":{"Morning Meeting":[[8,30],[8,50]],"D":[[8,55],[10,25]],"F":[[10,35],[12,5]],"Lunch":[[12,5],[12,55]],"E":[[12,55],[14,25]]}},
+      color_guide: {"A": "is-info", "B": "is-danger", "C": "is-primary", "D": "is-success", "E": "is-warning", "F": "is-dark"}
     }
   },
   methods: {
